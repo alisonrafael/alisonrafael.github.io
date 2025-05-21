@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Site pessoal do Analista de Sistemas Alison Rafael Polpeta Freitas, Maringá - Paraná - Brasil">
+    <meta name="keywords" content="alison, alison rafael, alison freitas, sistemas, computação, informática, php, html, ajax, jquery, java, perl, python, c, c++, javascript, inteligência artificial">
+    <title>alisonrafael - Systems Analyst</title>
+
+    <!-- Flowbite -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+
+    <!-- Custom -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+        /* Body */
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Loader */
+
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000b8;
+            z-index: 99;
+            transition: opacity 1s ease; 
+            opacity: 1; 
+        }
+
+        #preloader.hide {
+            opacity: 0;
+        }
+
+        #loader {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #9370DB;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        #loader:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #BA55D3;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+
+        #loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #FF00FF;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0%   {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Side Bar */
+
+        .active-file {
+            background-color: #2a2d2e;
+            border-left: 2px solid #4ec9b0;
+        }
+
+        /* File Content */
+
+        td.hljs-ln-numbers {
+            text-align: center;
+            color: #999;
+            border-right: 1px solid #999;
+            vertical-align: top;
+            padding-right: 5px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        td.hljs-ln-code {
+            padding-left: 10px;
+        }
+
+        /* Terminal */
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: #d4d4d4;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Scrollbar */
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #252526;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3e3e42;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+    </style>
+</head>
+
+<body class="flex flex-col h-screen">
+
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="loader"></div>
+    </div>
+
+    <!-- Top Bar -->
+    <nav class="fixed top-0 z-50 w-full bg-[#252526] text-[#d4d4d4] border-b border-[#37373d]">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start rtl:justify-end">
+                    <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center pr-2 pl-2 mr-3 ml-0 text-sm rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
+                        <span class="sr-only">Open sidebar</span>
+                        <i class="fa-solid fa-bars w-6 text-xl"></i>
+                    </button>
+                    <span class="text-[#569cd6] font-bold mr-5">alisonrafael</span>
+                    <div class="flex space-x-2">
+                        <!-- <button class="px-3 py-1 hover:bg-[#2d2d30] rounded">File</button> -->
+                        <button class="px-3 py-1 hover:bg-[#2d2d30] rounded" data-modal-target="email-modal" data-modal-toggle="email-modal">Contact</button>
+                        <button class="px-3 py-1 hover:bg-[#2d2d30] rounded" data-modal-target="sobre-modal" data-modal-toggle="sobre-modal" >About</button>
+                    </div>
+                </div>
+                <div class="flex items-center invisible sm:visible">
+                     <div class="flex items-center ms-3">
+                        <div class="flex items-center space-x-3">
+                            <div id="clock" class="text-sm text-gray-400 whitespace-nowrap"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Side Bar -->
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 mt-14 sm:mt-18" aria-label="Sidebar">
+        <div class="h-full overflow-y-auto bg-[#252526] border-r border-[#37373d]">
+            <div class="p-3 border-b border-[#37373d] flex items-center justify-between">
+                <span class="text-sm font-medium">EXPLORER</span>
+                <i class="fas fa-ellipsis text-gray-400 hover:text-white cursor-pointer"></i>
+            </div>
+            <div class="flex-1 overflow-y-auto">
+                <div class="py-2">
+                    <div class="px-3 py-1 flex items-center hover:bg-[#2a2d2e] cursor-pointer file-item" data-file="index">
+                        <i class="fas fa-file-code text-[#569cd6] mr-2"></i>
+                        <span>index.html</span>
+                    </div>
+                </div>
+                <div class="py-2">
+                    <div class="px-3 py-1 flex items-center hover:bg-[#2a2d2e] cursor-pointer">
+                        <i class="fas fa-folder-open text-[#4ec9b0] mr-2"></i>
+                        <span>files</span>
+                    </div>
+                    <div class="pl-8">
+                        <div class="px-3 py-1 flex items-center hover:bg-[#2a2d2e] cursor-pointer file-item" data-file="profile">
+                            <i class="fas fa-file-code text-[#569cd6] mr-2"></i>
+                            <span>profile.js</span>
+                        </div>
+                        <div class="px-3 py-1 flex items-center hover:bg-[#2a2d2e] cursor-pointer file-item" data-file="education">
+                            <i class="fas fa-file-code text-[#569cd6] mr-2"></i>
+                            <span>education.json</span>
+                        </div>
+                        <div class="px-3 py-1 flex items-center hover:bg-[#2a2d2e] cursor-pointer file-item" data-file="skills">
+                            <i class="fas fa-file-code text-[#569cd6] mr-2"></i>
+                            <span>skills.py</span>
+                        </div>
+                        <div class="px-3 py-1 flex items-center hover:bg-[#2a2d2e] cursor-pointer file-item" data-file="work">
+                            <i class="fas fa-file-code text-[#569cd6] mr-2"></i>
+                            <span>work.php</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="sm:ml-64 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14     flex flex-col flex-1 overflow-hidden">
+
+        <!-- File Content --> 
+        <main class="bg-[#1e1e1e] flex flex-col h-full overflow-auto">
+            <pre class="h-full"><code id="fileContent" class="h-full"></code></pre>
+        </main>
+
+        <!-- Terminal -->
+        <div class="bg-[#252526] border-t border-[#37373d] flex flex-col sticky bottom-0  h-64 flex flex-col">
+            <div class="p-3 border-b border-[#37373d] flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-terminal text-[#4ec9b0] mr-2"></i>
+                    <span class="text-sm">TERMINAL</span>
+                </div>
+                <div class="flex space-x-2">
+                    <i class="fas fa-ellipsis text-gray-400 hover:text-white cursor-pointer"></i>
+                </div>
+            </div>
+            <div id="terminalContent" class="flex-1 overflow-y-auto p-3 font-mono text-sm">
+            </div>
+            <div class="p-3 border-t border-[#37373d] flex items-center">
+                <span class="text-green-400 mr-2">></span>
+                <span class="cursor"></span>
+                <input type="text" id="terminalInput" class="bg-transparent flex-1 outline-none terminal-input" autocomplete="off" spellcheck="false" placeholder="">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal - About -->
+    <div id="sobre-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-[#252526] rounded-lg shadow-sm dark:bg-gray-700">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="sobre-modal">
+                    <i class="fas fa-xmark text-xl"></i>
+                    <span class="sr-only">Close</span>
+                </button>
+                <div class="p-4 md:p-5 text-center">
+                    <i class="fas fa-circle-exclamation text-5xl mb-4 w-12 h-12"></i>
+                    <h3 class="mb-5 ">
+                        Alison Rafael's Personal Website
+                    </h3>
+                    <button data-modal-hide="sobre-modal" type="button" class="bg-sky-700 hover:bg-sky-600 rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal - Email -->
+    <div id="email-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-[#252526] rounded-lg shadow-sm dark:bg-gray-700">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="email-modal">
+                    <i class="fas fa-xmark text-xl"></i>
+                    <span class="sr-only">Close</span>
+                </button>
+                <div class="p-4 md:p-5 ">
+                    <form id="emailForm">
+                        <label class="block   mb-2" for="email">
+                            E-mail
+                        </label>
+                        <input id="email" name="email" type="email" placeholder="your@email.com" required class="bg-[#2d2d30] rounded w-full py-2 px-3 leading-tight focus:outline-none focus:ring focus:ring-gray-700">
+
+                        <label class="block mt-4 mb-2" for="message">
+                            Message
+                        </label>
+                        <textarea id="message" name="message" placeholder="Your message..." required class="bg-[#2d2d30] rounded  w-full py-2 px-3 leading-tight h-32 resize-none focus:outline-none focus:ring focus:ring-gray-700"></textarea>
+
+                        <div class="g-recaptcha mt-4" data-sitekey="6Lc1Nj0rAAAAAFQkexLkjlVg1ugmTmhYzh_IWHmg"></div>
+
+                        <button id="emailFormSubmitBtn" type="submit" class="bg-sky-700 hover:bg-sky-600 rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mt-4 ">
+                            Send message
+                        </button>
+                        <p id="sendResultSuccess" class="text-green-500 py-2.5 mt-4 hidden">E-mail sent successfully!</p>
+                        <p id="sendResultError" class="text-red-500 py-2.5 mt-4 hidden">Unable to send e-mail. Please contact me using profile information.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Flowbite -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <!-- highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/groovy.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/perl.min.js"></script>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <!-- Custom -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const preloader = document.getElementById("preloader");
+            const terminalInput = document.getElementById('terminalInput');
+            const terminalContent = document.getElementById('terminalContent');
+            const fileContent = document.getElementById('fileContent');
+            const fileItems = document.querySelectorAll('.file-item');
+            const emailForm = document.getElementById('emailForm');
+            
+            let commandHistory = [];
+            let historyIndex = -1;
+            
+            const fileTemplates = {
+                 index: `
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Alison Rafael's Personal Website</title>
+    </head>
+    <body>
+        <p>
+            Hello, I'm Alison Rafael. <br>
+            I code.
+        </p>
+    </body>
+</html>
+                `,
+                profile: `
+const developer = {
+    nome: "Alison R. P. Freitas",
+    localizacao: "Maringá, Paraná, Brazil",
+    github: "github.com/alisonrafael",
+    linkedin: "linkedin.com/in/alisonrpf",
+    interesses: [
+        "Web Development",
+        "Artificial intelligence",
+        "Open Source"
+    ]
+};
+
+module.exports = developer;
+                `,
+                education: `
+{
+    "education": [
+        {
+            "institution": "University of Western Santa Catarina - Unioesc",
+            "course": "Specialization in Software Development with Java",
+            "period": "2019-2020"
+        },
+        {
+            "institution": "State University of Maringá - UEM",
+            "course": "Master in Computer Science",
+            "period": "2010-2013",
+            "highlights": [
+                "Dissertation: Studies with the development of a system for the automatic analysis of semantic coherence in scientific texts. Artificial Intelligence Area - Natural Language Processing.",
+            ]
+        },
+        {
+            "institution": "State University of Maringá - UEM",
+            "course": "Bachelor of Computer Science",
+            "period": "2005-2009",
+            "destaques": [
+                "Final Course Work: Studies with the development of a system for extracting attributes for classifying rhetorical roles in scientific texts. Artificial Intelligence Area - Natural Language Processing.",
+            ]
+        }
+    ],
+    "complementary_courses": [
+        {
+            "name": "Android and IOS Development with Flutter - Create 15 Apps",
+            "platform": "Udemy",
+            "duration": "67,5 hours",
+            "year": 2024
+        },
+        {
+            "name": "Ultimate Angular 5 with TypeScript and Bootstrap 4",
+            "platform": "Udemy",
+            "duracao": "9 hours",
+            "ano": 2016
+        }
+    ]
+}
+                `,
+                skills: `
+class Skills:
+    def __init__(self):
+
+        self.frontend = [
+            "HTML5",
+            "CSS3",
+            "Bootstrap",
+            "TailwindCSS",
+            "JavaScript",
+            "Angular",
+            "React"
+        ]
+        
+        self.backend = [
+            "Java",
+            "PHP"
+        ]
+        
+        self.database = [
+            "MySQL",
+            "MS SqlServer",
+            "DB2",
+            "Postgres"
+        ]
+        
+        self.devops = [
+            "Git"
+        ]
+        
+    def get_experience_level(self, technology):
+        expert = ["Java", "PHP", "DB2", "MS SqlServer", "JavaScript", "Bootstrap", "CSS3", "HTML5"]
+        intermediary = ["Git", "React", "Angular"]
+        
+        if technology in expert:
+            return "Advanced"
+        elif technology in intermediary:
+            return "Intermediary"
+        else:
+            return "Basic"
+
+skills = Skills()
+                `,
+                work: `
+<?php
+class Experience {
+    public string $company;
+    public string $position;
+    public string $period;
+    public array $technologies;
+    public array $responsibilities;
+
+    public function __construct(string $company, string $position, string $period, array $technologies, array $responsibilities) {
+        $this->company = $company;
+        $this->position = $position;
+        $this->period = $period;
+        $this->technologies = $technologies;
+        $this->responsibilities = $responsibilities;
+    }
+}
+
+$experiences = [
+    new Experience(
+        "State University of Maringá",
+        "Systems Analyst",
+        "2019 - Today",
+        ["Java", "DB2", "Bootstrap", "SpringBoot"],
+        [
+            "Design, development and maintenance of systems using Java, acquiring experience in the ZK, Hibernate and Grails/Groovy frameworks.",
+            "Maintenance of legacy systems in PHP and Delphi.", 
+            "I proposed and worked on the implementation of Git with GitLab, as well as Metabase with the development of a connection plugin for DB2 in Clojure.", 
+            "Created a responsive model integrating the ZK framework with Bootstrap.", 
+            "Created an API model with SpringBoot and JWT."
+        ]
+    ),
+    new Experience(
+        "Oderço Distributor",
+        "Systems Analyst",
+        "2017 - 2018",
+        ["PHP", "MySQL", "Angular"],
+        [
+            "Systems development with requirements gathering and design directly with the client and maintenance of legacy systems",
+            "Implemented system versioning and trained analysts in new development workflow",
+            "Responsible for analysis and performance improvement in API.",
+            "Acquired experience with PHP, JavaScript; JQuery library; GIT and Vagrant technologies; MySQL and Oracle databases; CodeIgniter, CakePHP, Laravel, AngularJS, Angular 2, Ionic and Electron frameworks; and WordPress and Magento platforms with backend and frontend development."
+        ]
+    ),
+    new Experience(
+        "Unicesumar",
+        "Systems Analyst",
+        "2015 - 2017",
+        ["PHP", "SQLServer", "Adobe Flex"],
+        [
+            "Systems development and maintenance.",
+            "Experience with PHP, ActionScript, JavaScript, C#; JQuery library; Adobe Flex, Silverlight, Git and Vagrant technologies; SQLServer and MySQL databases; AngularJS, Angular 2 frameworks."
+        ]
+    ),
+    new Experience(
+        "Freelancer",
+        "Programador Desktop/Web",
+        "2009 - 2015",
+        ["PHP", "JavaScript", "CSS", "CMS"],
+        [
+            "Systems development with experience in PHP, Java, C, C++, C#, Perl, Python, JavaScript, Delphi.", 
+            "For web applications, experience with Ajax, jQuery, CSS, WordPress platform for blogs/institutional websites and Magento platform for virtual stores/e-commerce.",
+            "Installation and configuration of chat/online service and email managers such as Zimbra and RoundCube."
+        ]
+    )
+];
+
+foreach ($experiences as $exp) {
+    echo "Company: {$exp->company}\\n";
+    echo "Position: {$exp->position}\\n";
+    echo "Period: {$exp->period}\\n\\n";
+}
+                `
+            };
+
+            // functions
+            // /////////////////////////////////////////////////////////////////////////////////////////
+            
+            function loadFile(fileName) {
+                if (fileTemplates[fileName]) {
+                    highlightActiveFile(fileName);
+                    const content = fileTemplates[fileName].trim();
+                    const result = hljs.highlightAuto(content);
+                    fileContent.innerHTML = result.value;
+                    hljs.initLineNumbersOnLoad();
+                }
+            }
+            
+            function highlightActiveFile(fileName) {
+                fileItems.forEach(f => f.classList.remove('active-file'));
+                const activeFile = document.querySelector(`.file-item[data-file="${fileName}"]`);
+                if (activeFile) {
+                    activeFile.classList.add('active-file');
+                }
+            }
+
+            function executeTerminalCommand(command) {
+                // Add command to terminal history
+                const commandElement = document.createElement('div');
+                commandElement.className = 'mt-2';
+                commandElement.innerHTML = `<span class="text-green-400">visitor@alisonrafael:~$</span> <span class="ml-2">${command}</span>`;
+                terminalContent.appendChild(commandElement);
+                
+                // Process command
+                let response = '';
+                switch(command.toLowerCase()) {
+                    case 'help':
+                        response = "help - Shows this message\nprofile - Shows personal information\neducation - Shows academic background\nskills - Shows technical skills\nwork - Shows work experience\nclear - Clears the terminal";
+                        break;
+                    case 'profile':
+                        loadFile('profile');
+                        response = "File profile.js loaded in the editor";
+                        break;
+                    case 'education':
+                        loadFile('education');
+                        response = "File education.json loaded in the editor";
+                        break;
+                    case 'skills':
+                        loadFile('skills');
+                        response = "File skills.py loaded in the editor";
+                        break;
+                    case 'work':
+                        loadFile('work');
+                        response = "File work.php loaded in the editor";
+                        break;
+                    case 'clear':
+                        loadFile('index');
+                        terminalContent.innerHTML = '';
+                        response = "Type 'help' to see the available commands";
+                        break;
+                    default:
+                        response = "Command not found: " + command + "\nType 'help' to see the available commands";
+                }
+                
+                // Add response to terminal
+                const responseElement = document.createElement('div');
+                responseElement.className = 'mt-1 mb-2 whitespace-pre-line';
+                responseElement.textContent = response;
+                terminalContent.appendChild(responseElement);
+                
+                // Scroll to bottom
+                terminalContent.scrollTop = terminalContent.scrollHeight;
+            }
+
+            function updateClock() {
+                const now = new Date();
+                const options = {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false,
+                    timeZone: 'America/Sao_Paulo',
+                };
+                const formatted = now.toLocaleString('en-US', options).replace(',', '').replace(/(\d+) (\w+) (\d+)/, '$2 $1 $3'); 
+                document.getElementById('clock').textContent = formatted;
+            }
+
+            // listeners
+            // /////////////////////////////////////////////////////////////////////////////////////////
+            
+            // Handle file clicks
+            fileItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const file = this.getAttribute('data-file');
+                    loadFile(file);
+                });
+            });
+
+            // Handle terminal history
+            terminalInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const command = terminalInput.value.trim();
+                    if (command) {
+                        executeTerminalCommand(command);
+                        commandHistory.push(command);
+                        historyIndex = commandHistory.length;
+                        terminalInput.value = '';
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    if (commandHistory.length > 0) {
+                        if (historyIndex > 0) {
+                            historyIndex--;
+                        }
+                        terminalInput.value = commandHistory[historyIndex] || '';
+                    }
+                } else if (e.key === 'ArrowDown') {
+                    if (commandHistory.length > 0) {
+                        if (historyIndex < commandHistory.length - 1) {
+                            historyIndex++;
+                            terminalInput.value = commandHistory[historyIndex] || '';
+                        } else {
+                            historyIndex = commandHistory.length;
+                            terminalInput.value = '';
+                        }
+                    }
+                }
+            });
+            
+            // Handle e-mail form
+            emailForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const email = document.getElementById('email');
+                const message = document.getElementById('message');
+                const btn = document.getElementById('emailFormSubmitBtn');
+                const sendResultSuccess = document.getElementById('sendResultSuccess');
+                const sendResultError = document.getElementById('sendResultError');
+
+                sendResultSuccess.classList.add('hidden');
+                sendResultError.classList.add('hidden');
+
+                btn.disabled = true;
+                btn.innerHTML = 'Sending...';
+
+                const serviceID = 'service_ctsxdtm';
+                const templateID = 'template_4lb1355';
+
+                emailjs.sendForm(serviceID, templateID, this)
+                .then(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Send message';
+                    email.value = '';
+                    message.value = '';
+                    sendResultSuccess.classList.remove('hidden');
+                }, (err) => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Send message';
+                    console.log(JSON.stringify(err));
+                    sendResultError.classList.remove('hidden');
+                });
+            });
+
+            // initialize
+            // /////////////////////////////////////////////////////////////////////////////////////////
+
+            // init home page
+            executeTerminalCommand('clear');
+            terminalInput.focus();
+
+            // init code editor
+            hljs.highlightAll();
+            hljs.initLineNumbersOnLoad();
+
+            // init clock
+            updateClock(); 
+            setInterval(updateClock, 1000); 
+
+            // init emailjs
+            emailjs.init("AxDnm4rKCym87584I");
+
+            // finish loader
+            preloader.classList.add("hide");
+            setTimeout(() => {
+                preloader.style.display = "none";
+            }, 1000); 
+
+        });
+    </script>
+
+</body>
+</html>
