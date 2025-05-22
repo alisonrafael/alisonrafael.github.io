@@ -192,7 +192,7 @@
     </div>
 
     <!-- Top Bar -->
-    <nav class="fixed top-0 w-full z-40 bg-[#252526] text-[#d4d4d4] border-b border-[#37373d] h-[56px]">
+    <nav class="fixed top-0 w-full bg-[#252526] text-[#d4d4d4] border-b border-[#37373d]">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start rtl:justify-end">
@@ -220,8 +220,8 @@
     </nav>
 
     <!-- Side Bar -->
-    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 mt-[56px]" aria-label="Sidebar">
-        <div class="h-full overflow-y-auto bg-[#252526] border-r border-[#37373d]">
+    <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 mt-14 sm:mt-18" aria-label="Sidebar">
+        <div class="h-full overflow-y-auto bg-[#252526] border-r border-t border-[#37373d]">
             <div class="p-3 border-b border-[#37373d] flex items-center justify-between">
                 <span class="text-sm font-medium">EXPLORER</span>
                 <i class="fas fa-ellipsis text-gray-400 hover:text-white cursor-pointer"></i>
@@ -262,15 +262,15 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="sm:ml-64 border-gray-200 border-dashed dark:border-gray-700 mt-[56px]     flex flex-col flex-1 overflow-hidden">
+    <div class="sm:ml-64 border-gray-200 border-dashed dark:border-gray-700 mt-14    overflow-hidden flex flex-col    h-[calc(100vh-56px)]"> <!-- flex-1 --> 
 
         <!-- File Content --> 
-        <main class="bg-[#1e1e1e] flex flex-col h-full overflow-auto">
+        <main class="bg-[#1e1e1e]  flex-1 overflow-auto"> <!-- flex flex-col  h-full-->
             <pre class="h-full"><code id="fileContent" class="h-full"></code></pre>
         </main>
 
         <!-- Terminal -->
-        <div class="bg-[#252526] border-t border-[#37373d] flex flex-col sticky bottom-0  h-64 flex flex-col">
+        <div class="bg-[#252526] border-t border-[#37373d] sticky bottom-0 flex flex-col  h-64 "> 
             <div class="p-3 border-b border-[#37373d] flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-terminal text-[#4ec9b0] mr-2"></i>
@@ -280,7 +280,7 @@
                     <i class="fas fa-ellipsis text-gray-400 hover:text-white cursor-pointer"></i>
                 </div>
             </div>
-            <div id="terminalContent" class="flex-1 overflow-y-auto p-3 font-mono text-sm">
+            <div id="terminalContent" class="p-3 font-mono text-sm flex-1 overflow-y-auto"> 
             </div>
             <div class="p-3 border-t border-[#37373d] flex items-center">
                 <span class="text-green-400 mr-2">></span>
